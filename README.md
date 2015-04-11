@@ -16,6 +16,11 @@ Another aspect of versioning is whether to version each individual endpoint with
 whole API (similar to what is done in programming APIs, in which when a new version is release, not all classes have 
 changed).
 
+This approach favours the idea that an API release increases the version on all endpoints (there's no need to change
+annotation on all endpoints, but only on the endpoints that require the version increase). This removes the need from
+clients to know exactly what version of each endpoint to call. This approach also allows, for more advanced clients, to
+cherrypick which version of each endpoint to use.
+
 ## Code
 
 Here's an example of how a controller looks like with this extension
@@ -47,10 +52,15 @@ allows to to extend the default `RequestMappingHandlerMapping` in order to add a
 `VersionedResourceRequestCondition` is responsible for figuring out if a controller method is a candidate to be invoked.
 
 
-#Drawbacks of this implementation
+##Drawbacks of this implementation
 1. Given that we need a custom `RequestMappingHandlerMapping`, instantiating it is non-trivial (see the 
 `WebConfiguration` class) and there's a danger that this class will change in a follow up version of spring and might 
 cause unexpected behaviour.
 2. This implementation doesn't check for a version upper boundary in the `@VersionedResource` and also routes higher,
 non-existent versions to methods without a version upper boundary 
 (see `TestControllerTest.shouldReturnUnboundedVersionForCallToVersion32`).
+
+##When is this approach a bad idea?
+I think using versions on the URLs for public APIs is a better approach as the users might not be familiar with HTTP
+(as an example Twitter and Facebook put the version on the URL). In these cases, making the API as simple as possible
+to use is quite important.
