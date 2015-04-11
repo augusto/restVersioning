@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 // annotated with RequestMapping
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface VersionedMedia {
+public @interface VersionedResource {
     /**
      * Media type without the version or representation for example if a full media type is
      * application/vnd.app.resource-1.1+json , then this value should contain application/vnd.app.resource

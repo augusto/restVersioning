@@ -1,7 +1,7 @@
 package com.augusto.test.web.controller;
 
 
-import com.augusto.test.spring.version.VersionedMedia;
+import com.augusto.test.spring.version.VersionedResource;
 import com.augusto.test.web.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@VersionedMedia(media = "application/vnd.app.resource")
-public class TestController {
-    private Logger logger = LoggerFactory.getLogger(TestController.class);
+@VersionedResource(media = "application/vnd.app.resource")
+public class PeopleController {
+    private Logger logger = LoggerFactory.getLogger(PeopleController.class);
 
     @RequestMapping(value = {"/people"}, method = RequestMethod.GET)
-    @VersionedMedia(from = "1.0", to = "1.0")
+    @VersionedResource(from = "1.0", to = "1.0")
     @ResponseBody
     public Person getPerson_v1() {
         logger.info("called /people with v1.0");
@@ -31,7 +31,7 @@ public class TestController {
     }
 
     @RequestMapping(value = {"/people"}, method = RequestMethod.GET)
-    @VersionedMedia(from = "2.0", to = "2.0")
+    @VersionedResource(from = "2.0", to = "2.0")
     @ResponseBody
     public Person getPerson_v2() {
         logger.info("called /people with v2.0");
@@ -45,7 +45,7 @@ public class TestController {
     }
 
     @RequestMapping(value = {"/people"}, method = RequestMethod.GET)
-    @VersionedMedia(from = "2.1")
+    @VersionedResource(from = "2.1")
     @ResponseBody
     public Person getPerson_latest() {
         logger.info("called /people latest");

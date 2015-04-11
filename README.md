@@ -22,17 +22,18 @@ Here's an example of how a controller looks like with this extension
 
 ```java
 @Controller
-@VersionedMedia(media = "application/vnd.app.resource")
+@VersionedResource(media = "application/vnd.app.resource")
 public class TestController {
+
     @RequestMapping(value = {"/resource"}, method = RequestMethod.GET)
-    @VersionedMedia(from = "1.0", to = "1.0")
+    @VersionedResource(from = "1.0", to = "1.0")
     @ResponseBody
     public Resource getResource_v1() {
         return new Resource("1.0");
     }
 
     @RequestMapping(value = {"/resource"}, method = RequestMethod.GET)
-    @VersionedMedia(from = "2.0")
+    @VersionedResource(from = "2.0")
     @ResponseBody
     public Resource getResource_v2_onwards() {
         return new Resource("2.0");
@@ -40,16 +41,16 @@ public class TestController {
 }
 ```
 
-There are 2 main classes that used to extend spring `CustomRequestMappingHandlerMapping` and `RestAcceptRequestCondition`.
-`CustomRequestMappingHandlerMapping` is the entry point of this extension and allows to to extend the default 
-`RequestMappingHandlerMapping` in order to add a custom `RequestCondition`. `RestAcceptRequestCondition` is responsible
-for figuring out if a controller method is a candidate to be invoked.
+There are 2 main classes that used to extend spring `CustomRequestMappingHandlerMapping` and 
+`VersionedResourceRequestCondition`. `CustomRequestMappingHandlerMapping` is the entry point of this extension and 
+allows to to extend the default `RequestMappingHandlerMapping` in order to add a custom `RequestCondition`. 
+`VersionedResourceRequestCondition` is responsible for figuring out if a controller method is a candidate to be invoked.
 
 
 #Drawbacks of this implementation
-1. Given that we need a custom `RequestMappingHandlerMapping`, instantiating it is non-trivial (see the `WebConfiguration`
-class) and there's a danger that this class will change in a follow up version of spring and might cause unexpected
-behaviour.
-2. This implementation doesn't check for a version upper boundary in the `@VersionedMedia` and also routes higher, 
+1. Given that we need a custom `RequestMappingHandlerMapping`, instantiating it is non-trivial (see the 
+`WebConfiguration` class) and there's a danger that this class will change in a follow up version of spring and might 
+cause unexpected behaviour.
+2. This implementation doesn't check for a version upper boundary in the `@VersionedResource` and also routes higher,
 non-existent versions to methods without a version upper boundary 
 (see `TestControllerTest.shouldReturnUnboundedVersionForCallToVersion32`).

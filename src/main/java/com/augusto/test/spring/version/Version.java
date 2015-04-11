@@ -3,8 +3,8 @@ package com.augusto.test.spring.version;
 public class Version implements Comparable<Version> {
     public static final String MAX_VERSION = "99.99";
 
-    private int major;
-    private int minor;
+    private final int major;
+    private final int minor;
 
     public Version(String version) {
         String tokens[] = version.split("\\.");

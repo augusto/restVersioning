@@ -1,7 +1,7 @@
 package com.augusto.test.spring;
 
-import com.augusto.test.spring.version.RestAcceptRequestCondition;
-import com.augusto.test.spring.version.VersionedMedia;
+import com.augusto.test.spring.version.VersionedResourceRequestCondition;
+import com.augusto.test.spring.version.VersionedResource;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.servlet.mvc.condition.RequestCondition;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -12,19 +12,19 @@ public class CustomRequestMappingHandlerMapping extends RequestMappingHandlerMap
 
     @Override
     protected RequestCondition<?> getCustomTypeCondition(Class<?> handlerType) {
-        VersionedMedia typeAnnotation = AnnotationUtils.findAnnotation(handlerType, VersionedMedia.class);
+        VersionedResource typeAnnotation = AnnotationUtils.findAnnotation(handlerType, VersionedResource.class);
         return createCondition(typeAnnotation);
     }
 
     @Override
     protected RequestCondition<?> getCustomMethodCondition(Method method) {
-        VersionedMedia methodAnnotation = AnnotationUtils.findAnnotation(method, VersionedMedia.class);
+        VersionedResource methodAnnotation = AnnotationUtils.findAnnotation(method, VersionedResource.class);
         return createCondition(methodAnnotation);
     }
 
-    private RequestCondition<?> createCondition(VersionedMedia versionMapping) {
+    private RequestCondition<?> createCondition(VersionedResource versionMapping) {
         if (versionMapping != null) {
-            return new RestAcceptRequestCondition(versionMapping.media(), versionMapping.from(), versionMapping.to());
+            return new VersionedResourceRequestCondition(versionMapping.media(), versionMapping.from(), versionMapping.to());
         }
 
         return null;

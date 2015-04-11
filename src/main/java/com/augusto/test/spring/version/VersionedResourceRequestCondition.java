@@ -10,16 +10,16 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RestAcceptRequestCondition extends AbstractRequestCondition<RestAcceptRequestCondition> {
-    private Logger logger = LoggerFactory.getLogger(RestAcceptRequestCondition.class);
+public class VersionedResourceRequestCondition extends AbstractRequestCondition<VersionedResourceRequestCondition> {
+    private Logger logger = LoggerFactory.getLogger(VersionedResourceRequestCondition.class);
     private final Set<VersionRange> versions;
     private final String acceptedMediaType;
 
-    public RestAcceptRequestCondition(String acceptedMediaType, String from, String to) {
+    public VersionedResourceRequestCondition(String acceptedMediaType, String from, String to) {
         this(acceptedMediaType, versionRange(from, to));
     }
 
-    public RestAcceptRequestCondition(String acceptedMediaType, Collection<VersionRange> versions) {
+    public VersionedResourceRequestCondition(String acceptedMediaType, Collection<VersionRange> versions) {
         this.acceptedMediaType = acceptedMediaType;
         this.versions = Collections.unmodifiableSet(new HashSet<VersionRange>(versions));
     }
@@ -38,7 +38,7 @@ public class RestAcceptRequestCondition extends AbstractRequestCondition<RestAcc
     }
 
     @Override
-    public RestAcceptRequestCondition combine(RestAcceptRequestCondition other) {
+    public VersionedResourceRequestCondition combine(VersionedResourceRequestCondition other) {
         logger.debug("Combining:\n{}\n{}", this, other);
         Set<VersionRange> newVersions = new LinkedHashSet<VersionRange>(this.versions);
         newVersions.addAll(other.versions);
@@ -51,11 +51,11 @@ public class RestAcceptRequestCondition extends AbstractRequestCondition<RestAcc
         } else {
             newMediaType = other.acceptedMediaType;
         }
-        return new RestAcceptRequestCondition(newMediaType, newVersions);
+        return new VersionedResourceRequestCondition(newMediaType, newVersions);
     }
 
     @Override
-    public RestAcceptRequestCondition getMatchingCondition(HttpServletRequest request) {
+    public VersionedResourceRequestCondition getMatchingCondition(HttpServletRequest request) {
 
         String accept = request.getHeader("Accept");
         Pattern regexPattern = Pattern.compile("(.*)-(\\d+\\.\\d+).*");
@@ -80,7 +80,7 @@ public class RestAcceptRequestCondition extends AbstractRequestCondition<RestAcc
     }
 
     @Override
-    public int compareTo(RestAcceptRequestCondition other, HttpServletRequest request) {
+    public int compareTo(VersionedResourceRequestCondition other, HttpServletRequest request) {
         return 0;
     }
 
